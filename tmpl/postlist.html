@@ -1,4 +1,16 @@
-<div *ngIf="postlist">
-  <div class="item " *ngFor="#post of postlist">{{post.metadata.slug}} </div>
+<div class="ui middle aligned  grid container" *ngIf="postlist">
+  <div class="ui items " *ngFor="#post of postlist">
+    <div class="item">
 
+
+      <div class="ui row content">
+
+        <h6 class="horizontal divider header" [routerLink]="['PostDetailComponent', { slug: post.metadata.slug }]">{{post.metadata.created}} - {{post.metadata.slug}}</h6>
+
+        <div class="description">
+          {{post.post.content}}
+        </div>
+      </div>
+    </div>
   </div>
+</div>

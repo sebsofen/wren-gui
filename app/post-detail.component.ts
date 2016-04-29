@@ -2,6 +2,7 @@ import {Component,  OnInit}  from 'angular2/core';
 import {PostMetadata, Post, PostAsm, BlogService}   from './blog.service';
 import {RouteParams, Router} from 'angular2/router';
 import {MarkdownService} from './markdown.service';
+
 @Component({
   templateUrl: 'tmpl/post.html',
   bindings: [MarkdownService]
