@@ -1,6 +1,7 @@
 import {Component} from 'angular2/core';
 import {RouteConfig, ROUTER_DIRECTIVES} from 'angular2/router';
 import {PostDetailComponent} from './post-detail.component';
+import {PostListComponent} from './post-list.component';
 import {BlogService} from './blog.service';
 import {Configuration} from './app.configuration';
 
@@ -15,7 +16,8 @@ import {Configuration} from './app.configuration';
 })
 
 @RouteConfig([
-  {path:'/post/:slug',      name: 'PostDetailComponent',   component: PostDetailComponent}
+  {path:'/post/by-slug/:slug',      name: 'PostDetailComponent',   component: PostDetailComponent},
+  {path:'/post/list',      name: 'PostListComponent',   component: PostListComponent}
 ])
 
 export class AppComponent { }

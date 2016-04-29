@@ -23,13 +23,15 @@ export class BlogService {
 
   constructor(private _http: Http, private _configuration:Configuration) {
     this.baseUrl = _configuration.Server;
-    this.postBySlugUrl = _configuration.PostBySlug
   }
 
 
   getPostBySlug(slug: string) {
     console.log(this.baseUrl + this.postBySlugUrl + slug)
-    return this._http.get(this.baseUrl + this.postBySlugUrl + slug).map(res => <PostAsm>res.json())
+    return this._http.get(this.baseUrl + "/by-slug/"  + slug).map(res => <PostAsm>res.json())
+  }
 
+  getPosts(limit: string = "10", offset: string = "0", order: string ="bydate", sort : string = "desc") {
+    return this._http.get(this.baseUrl + "?limit=" + (limit || "10")  + "&offset=" + (offset || "0") + "&order=" + (order || "bydate") + "&sort=" + (sort || "desc")   ).map(res => <PostAsm[]>res.json())
   }
 }
