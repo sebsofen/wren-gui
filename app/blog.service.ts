@@ -15,23 +15,30 @@ export class PostAsm {
   constructor(public metadata: PostMetadata, public post: Post) { }
 }
 
+export class BlogMetaInfo {
+  constructor(public tags: string[], public start : Number, public stop: Number, public postCount : Number) { }
+}
+
 
 @Injectable()
 export class BlogService {
-  private baseUrl : string;
-  private postBySlugUrl : string;
+  private cfg : Configuration;
 
   constructor(private _http: Http, private _configuration:Configuration) {
-    this.baseUrl = _configuration.Server;
+    this.cfg = _configuration;
   }
 
 
   getPostBySlug(slug: string) {
-    console.log(this.baseUrl + this.postBySlugUrl + slug)
-    return this._http.get(this.baseUrl + "/by-slug/"  + slug).map(res => <PostAsm>res.json())
+    return this._http.get(this.cfg.Server + "posts/by-slug/"  + slug).map(res => <PostAsm>res.json())
+  }
+
+  getBlogMetaInfo(start: Number = -1, stop: Number = Number.MAX_VALUE) {
+    return this._http.get(this.cfg.Server + "blog/metainfo?start=" + start + "&stop=" + stop ).map(res => <BlogMetaInfo>res.json())
   }
 
   getPosts(limit: string = "10", offset: string = "0", order: string ="bydate", sort : string = "desc") {
-    return this._http.get(this.baseUrl + "?limit=" + (limit || "10")  + "&offset=" + (offset || "0") + "&order=" + (order || "bydate") + "&sort=" + (sort || "desc")   ).map(res => <PostAsm[]>res.json())
+    return this._http.get(this.cfg.Server + "posts?limit=" + (limit || "10")  + "&offset=" + (offset || "0") + "&order=" + (order || "bydate") + "&sort=" + (sort || "desc")   ).map(res => <PostAsm[]>res.json())
   }
+  
 }
