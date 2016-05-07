@@ -16,7 +16,7 @@ export class PostAsm {
 }
 
 export class BlogMetaInfo {
-  constructor(public tags: string[], public start : Number, public stop: Number, public postCount : Number) { }
+  constructor(public tags: string[], public start : number, public stop: number, public postCount : number) { }
 }
 
 
@@ -33,12 +33,12 @@ export class BlogService {
     return this._http.get(this.cfg.Server + "posts/by-slug/"  + slug).map(res => <PostAsm>res.json())
   }
 
-  getBlogMetaInfo(start: Number = -1, stop: Number = Number.MAX_VALUE) {
-    return this._http.get(this.cfg.Server + "blog/metainfo?start=" + start + "&stop=" + stop ).map(res => <BlogMetaInfo>res.json())
+  getBlogMetaInfo() {
+    return this._http.get(this.cfg.Server + "blog/metainfo").map(res => <BlogMetaInfo>res.json())
   }
 
-  getPosts(limit: string = "10", offset: string = "0", order: string ="bydate", sort : string = "desc") {
+  getPosts(limit: Number | string = "10", offset: Number | string = "0", order: string ="bydate", sort : string = "desc") {
     return this._http.get(this.cfg.Server + "posts?limit=" + (limit || "10")  + "&offset=" + (offset || "0") + "&order=" + (order || "bydate") + "&sort=" + (sort || "desc")   ).map(res => <PostAsm[]>res.json())
   }
-  
+
 }
