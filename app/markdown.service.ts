@@ -1,5 +1,7 @@
 import { Injectable } from 'angular2/core';
 import marked from 'marked';
+import {Configuration} from './app.configuration';
+
 
 interface IMarkdownConfig {
   sanitize?: boolean,
@@ -11,9 +13,11 @@ interface IMarkdownConfig {
 @Injectable()
 export class MarkdownService {
   private md: MarkedStatic;
+  private cfg: Configuration;
 
-  constructor() {
+  constructor(private _configuration:Configuration) {
     this.md = marked.setOptions({});
+    this.cfg = _configuration;
   }
 
   setConfig(config: IMarkdownConfig) {
@@ -40,7 +44,20 @@ export class MarkdownService {
 
       }
     } while (m);
-    return this.md.parse(markneu);
+    var renderer = new this.md.Renderer();
+    let statfileserv = this.cfg.StaticFilesServer;
+    console.log(statfileserv);
+    renderer.image = function(href, title, text) {
+      var out = '<img src="' + statfileserv + "/" +  href + '" alt="' + text + '"';
+      if (title) {
+        out += ' title="' + title + '"';
+      }
+      out += this.options.xhtml ? '/>' : '>';
+      return out;
+    };
+
+
+    return this.md(markneu, { renderer: renderer });
   }
 
 
