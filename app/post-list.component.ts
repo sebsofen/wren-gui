@@ -72,7 +72,7 @@ export class PostListComponent implements OnInit{
 long2date(longdate: number): string {
     var time = new Date().getTime();
     var date = new Date(longdate * 1000);
-    return date.toString();
+    return date.toDateString();
   }
 
 }

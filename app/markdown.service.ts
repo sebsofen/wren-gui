@@ -1,7 +1,6 @@
 import { Injectable } from 'angular2/core';
 import marked from 'marked';
 import {Configuration} from './app.configuration';
-import hljs from 'highlightjs';
 
 interface IMarkdownConfig {
   sanitize?: boolean,
@@ -18,10 +17,6 @@ export class MarkdownService {
 
   constructor(private _configuration:Configuration) {
     this.md = marked.setOptions({
-      highlight: function (code) {
-        return hljs.highlightAuto(code).value
-
-      }
     });
     this.cfg = _configuration;
   }
