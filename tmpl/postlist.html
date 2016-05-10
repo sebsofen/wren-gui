@@ -1,22 +1,27 @@
 <div class="ui middle aligned  text container" *ngIf="postlist">
   <!-- post list -->
-  <div class="ui items row " *ngFor="#post of postlist">
-    <div class="item">
-
-
-      <div class="ui row content">
-
-        <h6 class="horizontal divider header" [routerLink]="['PostDetailComponent', { slug: post.metadata.slug }]">{{long2date(post.metadata.created)}} - {{post.metadata.title}}</h6>
-
-        <div class="description">
-          <p [innerHTML]=toMarkdown(post.post.content)> </p>
-        </div>
+  <div class="ui stackable one cards row " *ngFor="#post of postlist">
+    <div class="ui card" [routerLink]="['PostDetailComponent', { slug: post.metadata.slug }]">
+      <div class="content">
+          <div class="header">{{post.metadata.title}}</div>
+          <div class="meta">
+            <span class="right floated time">{{long2date(post.metadata.created)}}</span>
+            <span class="category">{{post.metadata.tags[0]}}</span>
+          </div>
+          <div class="description">
+            <p [innerHTML]=toMarkdown(post.post.content)> </p>
+          </div>
       </div>
+      <div class="extra content">
+          <div class="right floated author">Basti</div>
+        </div>
     </div>
   </div>
 
+<div class="ui divider"></div>
+
   <!-- pagination -->
-  <div class="ui pagination menu">
+  <div class="ui row pagination menu">
     <a *ngIf="page_current  > 0" class="item" [routerLink]="['PostListComponent', { page: 0, filter:filter }]">
       0
     </a>
