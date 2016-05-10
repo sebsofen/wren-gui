@@ -1,13 +1,14 @@
 import { Injectable } from 'angular2/core';
 import marked from 'marked';
 import {Configuration} from './app.configuration';
-
+import hljs from 'highlightjs';
 
 interface IMarkdownConfig {
   sanitize?: boolean,
   gfm?: boolean,
   breaks?: boolean,
-  smartypants?: boolean
+  smartypants?: boolean,
+
 }
 
 @Injectable()
@@ -16,7 +17,12 @@ export class MarkdownService {
   private cfg: Configuration;
 
   constructor(private _configuration:Configuration) {
-    this.md = marked.setOptions({});
+    this.md = marked.setOptions({
+      highlight: function (code) {
+        return hljs.highlightAuto(code).value
+
+      }
+    });
     this.cfg = _configuration;
   }
 
@@ -55,6 +61,8 @@ export class MarkdownService {
       out += this.options.xhtml ? '/>' : '>';
       return out;
     };
+
+
 
 
     return this.md(markneu, { renderer: renderer });

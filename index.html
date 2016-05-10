@@ -2,6 +2,9 @@
   <head>
     <base href="/">
     <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="node_modules/highlight.js/styles/default.css">
+
+
     <script src="semantic/dist/semantic.min.js"></script>
 
     <script
@@ -27,6 +30,8 @@
     <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
     <script src="node_modules/angular2/bundles/router.dev.js"></script>
     <script src="node_modules/angular2/bundles/http.dev.js"></script>
+  <script src="node_modules/highlight.js/lib/highlight.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
     </script>
 
 
@@ -34,7 +39,8 @@
     <script>
       System.config({
         map : {
-          marked: 'node_modules/marked/marked.min.js'
+          marked: 'node_modules/marked/marked.min.js',
+          highlightjs : 'node_modules/highlight.js/lib/highlight.js'
         },
         packages: {
           app: {
