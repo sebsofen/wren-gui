@@ -45,4 +45,8 @@ export class BlogService {
     return this._http.get(this.cfg.Server + "posts/by-tags/" + tags + "?compact=true&limit=" + (limit || "10")  + "&offset=" + (offset || "0") + "&order=" + (order || "bydate") + "&sort=" + (sort || "asc")   ).map(res => <PostAsm[]>res.json())
   }
 
+  getPostsBySearchString(limit: Number | string = "10", offset: Number | string = "0", order: string ="bydate", sort : string = "desc", search : string) {
+    return this._http.get(this.cfg.Server + "posts/by-search/" + search + "?compact=true&limit=" + (limit || "10")  + "&offset=" + (offset || "0") + "&order=" + (order || "bydate") + "&sort=" + (sort || "asc")   ).map(res => <PostAsm[]>res.json())
+  }
+
 }

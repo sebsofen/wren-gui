@@ -15,6 +15,13 @@ import {PostDetailComponent} from './post-detail.component';
 @Injectable()
 export class PostListComponent implements OnInit{
   postlist: PostAsm[];
+  limit: string;
+  order: string;
+  offset: string;
+  sort: string;
+  page: number;
+postsPerPage :number;
+
   private md: MarkdownService;
 
   page_total: number;
@@ -28,35 +35,34 @@ export class PostListComponent implements OnInit{
      private _service:BlogService,
       private _configuration:Configuration,
       private _md : MarkdownService
-
   ){
       this.cfg = _configuration;
       this.md = _md;
-
+      this.postsPerPage = this.cfg.Paginate_PostsPerPage;
   }
 
  ngOnInit() {
-   let limit = this._routeParams.get('limit');
-   let order = this._routeParams.get('order');
-   let offset = this._routeParams.get('offset');
-   let sort = this._routeParams.get('sort');
-   let page = parseInt(this._routeParams.get('page') || "0");
-   let filter = this._routeParams.get('filter') || "nofilter";
+   this.limit = this._routeParams.get('limit');
+   this.order = this._routeParams.get('order');
+   this.offset = this._routeParams.get('offset');
+   this.sort = this._routeParams.get('sort');
+   this.page = parseInt(this._routeParams.get('page') || "0");
+   this.filter = this._routeParams.get('filter') || "nofilter";
 
    this._service.getBlogMetaInfo().subscribe(metaInfo => {
     //total post count:
     let totPosts = metaInfo.postCount;
-    let postsPerPage = this.cfg.Paginate_PostsPerPage;
 
-    if(filter.startsWith("nofilter")){
-      this._service.getPosts(postsPerPage,page * postsPerPage,order,sort).subscribe(f => this.postlist = f);
-    }else if (filter.startsWith("tags:")){
-      var tags = filter.split(":")[1];
-      this._service.getPostsByTags(postsPerPage,page * postsPerPage,order,sort,tags).subscribe(f => this.postlist = f);
+    if(this.filter.startsWith("nofilter")){
+      this._service.getPosts(this.postsPerPage,this.page * this.postsPerPage,this.order,this.sort).subscribe(f => this.postlist = f);
+    }else if (this.filter.startsWith("tags:")){
+      var tags = this.filter.split(":")[1];
+      this._service.getPostsByTags(this.postsPerPage,this.page * this.postsPerPage,this.order,this.sort,tags).subscribe(f => this.postlist = f);
     }
-    this.filter = filter;
-    this.page_current = page;
-    this.page_total = Math.floor(totPosts / postsPerPage) - 1;
+
+
+    this.page_current = this.page;
+    this.page_total = Math.floor(totPosts / this.postsPerPage) - 1;
 
     //update paginator!
    });
@@ -64,12 +70,15 @@ export class PostListComponent implements OnInit{
 
  }
 
+  searchPosts(searchstr: string) {
+    this._service.getPostsBySearchString(this.postsPerPage,this.page * this.postsPerPage,this.order,this.sort,searchstr).subscribe(f => this.postlist = f);
+  }
 
   toMarkdown(content: string) : string {
     return this.md.convert(content);
   }
 
-long2date(longdate: number): string {
+  long2date(longdate: number): string {
     var time = new Date().getTime();
     var date = new Date(longdate * 1000);
     return date.toDateString();

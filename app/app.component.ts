@@ -17,7 +17,8 @@ import {Configuration} from './app.configuration';
 
 @RouteConfig([
   {path:'/post/by-slug/:slug',      name: 'PostDetailComponent',   component: PostDetailComponent},
-  {path:'/post/list',      name: 'PostListComponent',   component: PostListComponent}
+  {path:'/post/list',      name: 'PostListComponent',   component: PostListComponent},
+  {path:'',      name: 'PostListComponent',   component: PostListComponent}
 ])
 
 export class AppComponent { }
