@@ -1,25 +1,22 @@
-<div *ngIf="post">
-
-  <div class="ui middle aligned  text container">
-
+<div class="ui middle aligned  text container">
+  <div *ngIf="post">
     <h6 class="ui horizontal divider header">{{long2date(post.metadata.created)}}</h6>
+    <h1 class="ui header row">{{post.metadata.title}}</h1>
 
-  <h1 class="ui header row">{{post.metadata.title}} </h1>
-
-
-  <p [innerHTML]=toMarkdown(post.post.content)>
-  </p>
-
-<div class="row">
-<div class="ui inverted segment">
-<div class="ui horizontal list divided inverted">
-  <div class="item " *ngFor="#tag of post.metadata.tags">
-    <a [routerLink]="['PostListComponent', { filter : 'tags:' + tag }]">
-    {{tag}}
-  </a>
+    <p [innerHTML]=toMarkdown(post.post.content)></p>
   </div>
-</div>
+
+  <div class="ui raised segment" style="height:180px" #map></div>
+
+  <div *ngIf="post">
+    <div class="row">
+      <div class="ui inverted segment">
+        <div class="ui horizontal list divided inverted">
+          <div class="item " *ngFor="#tag of post.metadata.tags">
+            <a [routerLink]="['PostListComponent', { filter : 'tags:' + tag }]">{{tag}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-</div>
 </div>

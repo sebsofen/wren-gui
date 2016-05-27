@@ -7,6 +7,9 @@
   "installed": {
     "marked/marked.d.ts": {
       "commit": "08ed4e9f1869e37e29514d862e0158b40e550232"
+    },
+    "leaflet/leaflet.d.ts": {
+      "commit": "1da639a106527e0c4010b354a1efe52a3059a291"
     }
   }
 }

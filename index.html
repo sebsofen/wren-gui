@@ -3,7 +3,7 @@
     <base href="/">
     <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
     <link rel="stylesheet" type="text/css" href="node_modules/highlight.js/styles/default.css">
-
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
 
     <script src="semantic/dist/semantic.min.js"></script>
 
@@ -21,6 +21,7 @@
 
     <!-- 1. Load libraries -->
     <!-- IE required polyfills, in this exact order -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
     <script src="node_modules/es6-shim/es6-shim.min.js"></script>
     <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
     <script src="node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
@@ -30,7 +31,8 @@
     <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
     <script src="node_modules/angular2/bundles/router.dev.js"></script>
     <script src="node_modules/angular2/bundles/http.dev.js"></script>
-  <script src="node_modules/highlight.js/lib/highlight.js"></script>
+    <script src="node_modules/highlight.js/lib/highlight.js"></script>
+
   <script>hljs.initHighlightingOnLoad();</script>
     </script>
 
@@ -39,7 +41,9 @@
     <script>
       System.config({
         map : {
+          leaflet: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
           marked: 'node_modules/marked/marked.min.js'
+
         },
         packages: {
           app: {
@@ -115,6 +119,7 @@
 
   <!-- 3. Display the application -->
   <body>
+    
 
     <div class="ui main text container">
       <h1 class="ui header"><a href="/">Trailmagic</a> </h1>
