@@ -6,9 +6,20 @@
     <p [innerHTML]=toMarkdown(post.post.content)></p>
   </div>
 
-  <div class="ui raised segment" style="height:180px" #map></div>
 
-  <div *ngIf="post">
+
+
+  <div [hidden] = "!showmap" class="ui raised segment" style="height:600px" #map></div>
+
+  <div *ngIf="geofiles.length">
+
+    Geofiles:
+    <div class="row list">
+      <div class="item " *ngFor="#geofile of geofiles">
+        <a href="{{geofile.path}}" target="_blank">{{geofile.name}}</a>
+      </div>
+    </div>
+
     <div class="row">
       <div class="ui inverted segment">
         <div class="ui horizontal list divided inverted">
