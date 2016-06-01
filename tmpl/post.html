@@ -2,7 +2,9 @@
   <div *ngIf="post">
     <h6 class="ui horizontal divider header">{{long2date(post.metadata.created)}}</h6>
     <h1 class="ui header row">{{post.metadata.title}}</h1>
-
+    <div *ngIf="post.metadata.coverImage">
+      <img class="ui fluid image" src="{{post.metadata.coverImage}}" />
+    </div>
     <p [innerHTML]=toMarkdown(post.post.content)></p>
   </div>
 

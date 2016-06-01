@@ -23,7 +23,12 @@
             <span class="right floated time">{{long2date(post.metadata.created)}}</span>
             <span class="category">{{post.metadata.tags[0]}}</span>
           </div>
+
           <div class="description">
+            <div *ngIf="post.metadata.coverImage">
+              <img class="ui fluid image rounded" src="{{post.metadata.coverImage}}" />
+            </div>
+
             <p [innerHTML]=toMarkdown(post.post.content)> </p>
           </div>
       </div>

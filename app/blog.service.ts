@@ -4,7 +4,7 @@ import {Configuration} from './app.configuration';
 import 'rxjs/Rx';
 
 export class PostMetadata {
-  constructor(public title: string, public created: number, public tags: string[], public slug: string) { }
+  constructor(public title: string, public created: number, public tags: string[], public slug: string, public coverImage : string) { }
 }
 
 export class Post {
@@ -30,7 +30,9 @@ export class BlogService {
 
 
   getPostBySlug(slug: string) {
-    return this._http.get(this.cfg.Server + "posts/by-slug/"  + slug).map(res => <PostAsm>res.json())
+    return this._http.get(this.cfg.Server + "posts/by-slug/"  + slug)
+    .map(res => <PostAsm>res.json())
+    .map(g => this.resolveAdresses(g));
   }
 
   getBlogMetaInfo() {
@@ -38,15 +40,27 @@ export class BlogService {
   }
 
   getPosts(limit: Number | string = "10", offset: Number | string = "0", order: string ="bydate", sort : string = "desc") {
-    return this._http.get(this.cfg.Server + "posts?compact=true&limit=" + (limit || "10")  + "&offset=" + (offset || "0") + "&order=" + (order || "bydate") + "&sort=" + (sort || "asc")   ).map(res => <PostAsm[]>res.json())
+    return this._http.get(this.cfg.Server + "posts?compact=true&limit=" + (limit || "10")  + "&offset=" + (offset || "0") + "&order=" + (order || "bydate") + "&sort=" + (sort || "asc")   )
+    .map(res => <PostAsm[]>res.json())
+    .map( f =>  f.map(g => this.resolveAdresses(g)));
   }
 
   getPostsByTags(limit: Number | string = "10", offset: Number | string = "0", order: string ="bydate", sort : string = "desc", tags : string) {
-    return this._http.get(this.cfg.Server + "posts/by-tags/" + tags + "?compact=true&limit=" + (limit || "10")  + "&offset=" + (offset || "0") + "&order=" + (order || "bydate") + "&sort=" + (sort || "asc")   ).map(res => <PostAsm[]>res.json())
+    return this._http.get(this.cfg.Server + "posts/by-tags/" + tags + "?compact=true&limit=" + (limit || "10")  + "&offset=" + (offset || "0") + "&order=" + (order || "bydate") + "&sort=" + (sort || "asc")   )
+    .map(res => <PostAsm[]>res.json())
+    .map( f =>  f.map(g => this.resolveAdresses(g)));
   }
 
   getPostsBySearchString(limit: Number | string = "10", offset: Number | string = "0", order: string ="bydate", sort : string = "desc", search : string) {
-    return this._http.get(this.cfg.Server + "posts/by-search/" + search + "?compact=true&limit=" + (limit || "10")  + "&offset=" + (offset || "0") + "&order=" + (order || "bydate") + "&sort=" + (sort || "asc")   ).map(res => <PostAsm[]>res.json())
+    return this._http.get(this.cfg.Server + "posts/by-search/" + search + "?compact=true&limit=" + (limit || "10")  + "&offset=" + (offset || "0") + "&order=" + (order || "bydate") + "&sort=" + (sort || "asc")   )
+    .map(res => <PostAsm[]>res.json())
+    .map( f =>  f.map(g => this.resolveAdresses(g)));
   }
 
+  resolveAdresses(post: PostAsm) : PostAsm {
+    if(post.metadata.coverImage !== undefined) {
+      post.metadata.coverImage = this.cfg.StaticFilesServer+ post.metadata.coverImage.replace("~",post.metadata.slug)
+    }
+    return post
+  }
 }
