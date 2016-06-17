@@ -1,0 +1,70 @@
+<div class="ui middle aligned  text container" *ngIf="postlist">
+  <!-- Menu for posts -->
+  <div class="ui icon menu">
+
+
+  <div class="ui right  search item">
+      <div class="ui transparent icon input">
+        <input [(ngModel)]="searchpostsinput" class="prompt" type="text" placeholder="Search...">
+        <i class="search link icon" (click)="searchPosts(searchpostsinput)"></i>
+      </div>
+
+    </div>
+    <div class="item ">
+      <i class="filter icon"></i>
+    </div>
+
+</div>
+
+
+  <!-- post list -->
+  <div class="ui stackable one cards row " *ngFor="#post of postlist">
+    <div class="ui card" [routerLink]="['PostDetailComponent', { slug: post.metadata.slug }]">
+      <div class="content">
+          <div class="header">{{post.metadata.title}}</div>
+          <div class="meta">
+            <span class="right floated time">{{long2date(post.metadata.created)}}</span>
+            <span class="category">{{post.metadata.tags[0]}}</span>
+          </div>
+
+          <div class="description">
+            <div *ngIf="post.metadata.coverImage">
+              <img class="ui fluid image rounded" src="{{post.metadata.coverImage}}" />
+            </div>
+
+            <p [innerHTML]=toMarkdown(post.post.content)> </p>
+          </div>
+      </div>
+      <div class="extra content">
+          <div class="right floated author">Basti</div>
+        </div>
+    </div>
+  </div>
+
+<div class="ui divider"></div>
+
+  <!-- pagination -->
+  <div class="ui row pagination menu">
+    <a *ngIf="page_current  > 0" class="item" [routerLink]="['PostListComponent', { page: 0, filter:filter }]">
+      0
+    </a>
+    <a *ngIf="page_current - 2 > 0" class="disabled item">
+      ...
+    </a>
+    <a class="item" *ngIf="page_current - 1 > 0" [routerLink]="['PostListComponent', { page: (page_current - 1),filter:filter  }]">
+      {{page_current - 1}}
+    </a>
+    <a class="active item"  [routerLink]="['PostListComponent', { page: page_current,filter:filter  }]">
+      {{page_current}}
+    </a>
+    <a class="item" *ngIf="page_current < page_total - 1" [routerLink]="['PostListComponent', { page: (page_current + 1),filter:filter }]">
+      {{page_current + 1}}
+    </a>
+    <a *ngIf="page_current < page_total - 2" class="disabled item">
+      ...
+    </a>
+    <a *ngIf="page_current < page_total" class="item" [routerLink]="['PostListComponent', { page: page_total,filter:filter }]">
+      {{page_total}}
+    </a>
+  </div>
+</div>

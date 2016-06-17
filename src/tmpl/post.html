@@ -1,0 +1,37 @@
+<div class="ui middle aligned  text container">
+  <div *ngIf="post">
+    <h6 class="ui horizontal divider header">{{long2date(post.metadata.created)}}</h6>
+    <h1 class="ui header row">{{post.metadata.title}}</h1>
+    <div *ngIf="post.metadata.coverImage">
+      <img class="ui fluid image" src="{{post.metadata.coverImage}}" />
+    </div>
+    <p [innerHTML]=toMarkdown(post.post.content)></p>
+  </div>
+
+
+
+
+  <div [hidden] = "!showmap" class="ui raised segment" style="height:600px" #map></div>
+
+  <div *ngIf="geofiles.length">
+
+    Geofiles:
+    <div class="row list">
+      <div class="item " *ngFor="#geofile of geofiles">
+        <a href="{{geofile.path}}" target="_blank">{{geofile.name}}</a>
+      </div>
+    </div>
+</div>
+<div *ngIf="post">
+
+    <div class="row">
+      <div class="ui inverted segment">
+        <div class="ui horizontal list divided inverted">
+          <div class="item " *ngFor="#tag of post.metadata.tags">
+            <a [routerLink]="['PostListComponent', { filter : 'tags:' + tag }]">{{tag}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</div>
