@@ -41,7 +41,6 @@ export class MarkdownService {
       m = regex.exec(markdown);
       if (m) {
         i++;
-        console.log(m[1], m[2]);
         markneu = markneu.replace(m[1],"<sup>[" + i + "]</sup>");
         markneu += "- [" + i + "]" + m[2] + "\n";
 
@@ -49,7 +48,6 @@ export class MarkdownService {
     } while (m);
     var renderer = new this.md.Renderer();
     let statfileserv = this.cfg.StaticFilesServer;
-    console.log(statfileserv);
     renderer.image = function(href, title, text) {
       var out = '<img src="' + statfileserv + "/" +  href + '" alt="' + text + '"';
       if (title) {

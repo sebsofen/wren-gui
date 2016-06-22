@@ -11,7 +11,9 @@ export class GeoFile {
 
 
 @Component({
-  templateUrl: 'tmpl/post.html',
+
+  template: require('to-string!../tmpl/post.html'),
+
   bindings: [MarkdownService],
   directives: [ROUTER_DIRECTIVES],
 
@@ -43,12 +45,11 @@ export class PostDetailComponent implements OnInit{
    let slug = this._routeParams.get('slug');
    this._service.getPostBySlug(slug).subscribe(f => {
      this.post = f
+     this.post.post.content = this.post.post.content.replace(/~/g, this.post.metadata.slug);
      //find map tag
      var myRegexp = /\[map file=\"(.*)\" (.*)\]/g;
      var match = myRegexp.exec(this.post.post.content);
      if (match) {
-
-     console.log(match[1]);
      this.post.post.content = this.post.post.content.replace(match[0],"");
      this.geofiles.push(new GeoFile("http://localhost:9000/v1/trailmagic/static/" + this.post.metadata.slug + "/" + match[1], match[2]));
      console.log(this.geofiles);

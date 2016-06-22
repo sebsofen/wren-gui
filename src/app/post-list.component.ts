@@ -7,7 +7,8 @@ import {Injectable} from 'angular2/core';
 
 import {PostDetailComponent} from './post-detail.component';
 @Component({
-  templateUrl: 'tmpl/postlist.html',
+  template: require('to-string!../tmpl/postlist.html'),
+
   bindings: [MarkdownService],
   directives: [ROUTER_DIRECTIVES],
 })
