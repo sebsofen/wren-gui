@@ -58,7 +58,7 @@ module.exports = webpackMerge(commonConfig, {
    * See: http://webpack.github.io/docs/configuration.html#output
    */
   output: {
-
+	publicPath : "/v1/trailmagic/",
     /**
      * The output directory as absolute path (required).
      *
