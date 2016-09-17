@@ -4,6 +4,7 @@ import {ROUTER_DIRECTIVES,RouteConfig,RouteParams, Router} from 'angular2/router
 import {MarkdownService} from './markdown.service';
 import {Map, TileLayer} from 'leaflet';
 import { Http, Response, Headers } from 'angular2/http';
+import {Configuration} from './app.configuration';
 
 export class GeoFile {
   constructor(public path: string, public name: string) { }
@@ -20,6 +21,8 @@ export class GeoFile {
 })
 export class PostDetailComponent implements OnInit{
   post: PostAsm;
+  private cfg : Configuration;
+
   geofiles: GeoFile[] = [];
   private md: MarkdownService;
   mymap: Map;
@@ -33,9 +36,12 @@ export class PostDetailComponent implements OnInit{
      private _router:Router,
      private _routeParams:RouteParams,
      private _service:BlogService,
-    private _md : MarkdownService
+    private _md : MarkdownService,
+    private _configuration:Configuration
   ){
     this.md = _md;
+    this.cfg = _configuration;
+
 
 
   }
@@ -47,23 +53,86 @@ export class PostDetailComponent implements OnInit{
      this.post = f
      this.post.post.content = this.post.post.content.replace(/~/g, this.post.metadata.slug);
      //find map tag
-     var myRegexp = /\[map file=\"(.*)\" (.*)\]/g;
-     var match = myRegexp.exec(this.post.post.content);
-     if (match) {
-     this.post.post.content = this.post.post.content.replace(match[0],"");
-     this.geofiles.push(new GeoFile("http://localhost:9000/v1/trailmagic/static/" + this.post.metadata.slug + "/" + match[1], match[2]));
-     console.log(this.geofiles);
+     var myRegexp = /\[map file=\"(.*)\" *(.*) *([^=^ .]+) *\]/g;
 
-     this._http.get("http://localhost:9000/v1/trailmagic/static/" + this.post.metadata.slug + "/" + match[1]).subscribe(k => {
-       var group = L.geoJson(k.json());
-       group.addTo(this.mymap);
-       this.mymap.fitBounds(group.getBounds());
-
-     });
-
-   }else{
+     var mapNoShow = true;
      this.showmap = false;
-   }
+
+     var tmpPostContent = this.post.post.content
+     var match = myRegexp.exec(this.post.post.content);
+
+
+
+     while (match != null) {
+       this.showmap = true;
+       tmpPostContent = tmpPostContent.replace(match[0],"");
+       var cmds = match[2].split(" ");
+              console.log(cmds);
+              var SPLITBY = "";
+              for (var i in cmds) {
+                var cmd = cmds[i];
+                console.log("cmd " + cmd)
+                if (cmd.startsWith("splitby=")){
+                  SPLITBY = cmd.replace("splitby=","");
+                }
+              }
+
+
+       this.geofiles.push(new GeoFile(this.cfg.StaticFilesServer + this.post.metadata.slug + "/" + match[1], match[3]));
+       console.log(this.geofiles);
+
+       var mmap = this.mymap;
+
+       this._http.get(this.cfg.StaticFilesServer + this.post.metadata.slug + "/" + match[1]).subscribe(
+         k => {
+
+         var group = L.geoJson(k.json(), {
+           onEachFeature : function(feature,layer) {
+            switch (SPLITBY) {
+              case "day":
+                if(feature.geometry.type == "LineString"){
+                  //perform split by date
+                  var savedTs = 0;
+                  var daycount = 1;
+                  for (var _i = 0; _i < feature.properties.coordTimes.length; _i++){
+                    var curTs = new Date(feature.properties.coordTimes[_i]).getTime();
+                    if(savedTs + 3600 * 24 * 1000 < curTs){
+                      console.log("New marker");
+                      savedTs = curTs;
+                      //create popup
+                      var daysplitlocation = feature.geometry.coordinates[_i];
+                      console.log(daysplitlocation)
+                     L.marker([daysplitlocation[1], daysplitlocation[0]], {
+                       icon: new L.DivIcon({
+                         className: 'leaflet-div-icon',
+                         html: '<div class="leaflet-div-icon" style="width:50px;">Tag ' + daycount + '</div>'
+                       })
+                     }).addTo(mmap);
+
+                      daycount += 1;
+                    }
+                  }
+                  console.log(feature.properties.coordTimes)
+                  console.log(feature.geometry.coordinates)
+                }
+              break;
+            }
+
+
+           }
+         });
+
+
+         group.addTo(this.mymap);
+         this.mymap.fitBounds(group.getBounds());
+
+       });
+
+       match = myRegexp.exec(this.post.post.content);
+     }
+
+     this.post.post.content = tmpPostContent;
+
    });
 
 
