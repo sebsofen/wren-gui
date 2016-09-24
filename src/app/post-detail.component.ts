@@ -83,7 +83,7 @@ export class PostDetailComponent implements OnInit{
 
        var mmap = this.mymap;
 
-       this._http.get(this.cfg.StaticFilesServer + this.post.metadata.slug + "/" + match[1]).subscribe(
+       this._http.get(this.cfg.StaticFilesServer + "posts/" + this.post.metadata.slug + "/" + match[1]).subscribe(
          k => {
            var savedTs = 0;
            var daycount = 1;

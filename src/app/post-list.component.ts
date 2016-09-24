@@ -1,14 +1,26 @@
 import {Component,  OnInit}  from 'angular2/core';
-import {PostMetadata, Post, PostAsm, BlogService}   from './blog.service';
+import {PostMetadata, Post, Author, PostAsm, BlogService}   from './blog.service';
 import {ROUTER_DIRECTIVES,RouteConfig,RouteParams, Router} from 'angular2/router';
 import {MarkdownService} from './markdown.service';
 import {Configuration} from './app.configuration';
 import {Injectable} from 'angular2/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 import {PostDetailComponent} from './post-detail.component';
+
+@Pipe({name: 'identity'})
+export class IdentityPipe implements PipeTransform {
+  transform(objj: {[id: string] : Author}, args: string): Author {
+    if(objj != null){
+  return objj[args];  
+    }
+
+  }
+}
+
 @Component({
   template: require('to-string!../tmpl/postlist.html'),
-
+  pipes: [IdentityPipe],
   bindings: [MarkdownService],
   directives: [ROUTER_DIRECTIVES],
 })
@@ -22,6 +34,11 @@ export class PostListComponent implements OnInit{
   sort: string;
   page: number;
 postsPerPage :number;
+
+  authors = this._service.getAuthorsList().map(f => f.reduce(function(map, obj) {
+    map[obj.id] = obj;
+    return map;
+}, {}))
 
   private md: MarkdownService;
 
@@ -83,6 +100,12 @@ postsPerPage :number;
     var time = new Date().getTime();
     var date = new Date(longdate * 1000);
     return date.toDateString();
+  }
+
+  getImageForAuthor(author: string) {
+    return  this._service.getAuthorByName(author).map(g => g.img).toPromise();
+
+
   }
 
 }

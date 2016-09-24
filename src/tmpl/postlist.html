@@ -43,7 +43,12 @@
           </div>
       </div>
       <div class="extra content">
-          <div class="right floated author">Basti</div>
+
+
+                <div class="image right floated avatar "  *ngFor="#author of post.metadata.authors">
+                    <img src="{{(authors | async  | identity:author)?.img  }}">
+
+                  </div>
         </div>
     </div>
   </div>

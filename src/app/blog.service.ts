@@ -4,7 +4,7 @@ import {Configuration} from './app.configuration';
 import 'rxjs/Rx';
 
 export class PostMetadata {
-  constructor(public title: string, public created: number, public tags: string[], public slug: string, public coverImage : string) { }
+  constructor(public title: string, public created: number, public tags: string[], public slug: string, public coverImage : string, public authors: string[]) { }
 }
 
 export class Post {
@@ -34,6 +34,16 @@ export class BlogService {
 
   constructor(private _http: Http, private _configuration:Configuration) {
     this.cfg = _configuration;
+  }
+
+
+
+  getAuthorByName(name: string) {
+    return this._http.get(this.cfg.Server + "authors/by-name/" + name)
+    .map(res => <Author[]>res.json())
+    .map(f => f[0])
+    .map(g => this.resolveAuthorImage(g));
+
   }
 
   getAuthorsList() {
