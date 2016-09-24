@@ -8,7 +8,7 @@ import {Configuration} from './app.configuration';
 import {BlogService} from './blog.service';
 import {PostDetailComponent} from './post-detail.component';
 import {PostListComponent} from './post-list.component';
-
+import {AuthorsListComponent} from './authors-list.component';
 
 import { AppState } from './app.service';
 import { Home } from './home';
@@ -33,6 +33,7 @@ import { RouterActive } from './router-active';
 @RouteConfig([
   {path:'/post/by-slug/:slug',      name: 'PostDetailComponent',   component: PostDetailComponent},
   {path:'/post/list',      name: 'PostListComponent',   component: PostListComponent},
+  {path:'/authors',      name: 'AuthorsListComponent',   component: AuthorsListComponent},
   {path:'',      name: 'PostListComponent',   component: PostListComponent}
 ])
 

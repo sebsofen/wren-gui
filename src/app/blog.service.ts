@@ -19,6 +19,14 @@ export class BlogMetaInfo {
   constructor(public tags: string[], public start : number, public stop: number, public postCount : number) { }
 }
 
+export class Author {
+  constructor(public id: string, public name: string, public img: string, public title: string, public desc:string) {}
+}
+
+export class AuthorMeta {
+  constructor(postlist: string[]){}
+}
+
 
 @Injectable()
 export class BlogService {
@@ -28,6 +36,11 @@ export class BlogService {
     this.cfg = _configuration;
   }
 
+  getAuthorsList() {
+    return this._http.get(this.cfg.Server + "authors")
+    .map(res => <Author[]>res.json())
+    .map(a => a.map(g => this.resolveAuthorImage(g)) );
+  }
 
   getPostBySlug(slug: string) {
     return this._http.get(this.cfg.Server + "posts/by-slug/"  + slug)
@@ -59,8 +72,14 @@ export class BlogService {
 
   resolveAdresses(post: PostAsm) : PostAsm {
     if(post.metadata.coverImage !== undefined) {
-      post.metadata.coverImage = this.cfg.StaticFilesServer+ post.metadata.coverImage.replace("~",post.metadata.slug)
+      post.metadata.coverImage = this.cfg.StaticFilesServer + "posts/" + post.metadata.coverImage.replace("~",post.metadata.slug)
     }
     return post
+  }
+
+  resolveAuthorImage(author: Author) : Author {
+
+    author.img = this.cfg.StaticFilesServer + "authors/" + author.img.replace("~",author.id)
+    return author
   }
 }

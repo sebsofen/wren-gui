@@ -85,15 +85,16 @@ export class PostDetailComponent implements OnInit{
 
        this._http.get(this.cfg.StaticFilesServer + this.post.metadata.slug + "/" + match[1]).subscribe(
          k => {
-
+           var savedTs = 0;
+           var daycount = 1;
          var group = L.geoJson(k.json(), {
            onEachFeature : function(feature,layer) {
             switch (SPLITBY) {
               case "day":
                 if(feature.geometry.type == "LineString"){
                   //perform split by date
-                  var savedTs = 0;
-                  var daycount = 1;
+
+
                   for (var _i = 0; _i < feature.properties.coordTimes.length; _i++){
                     var curTs = new Date(feature.properties.coordTimes[_i]).getTime();
                     if(savedTs + 3600 * 24 * 1000 < curTs){
